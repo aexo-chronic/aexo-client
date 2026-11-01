@@ -58,7 +58,8 @@ button:hover {
 
 .topbar,
 .panel,
-.inventory-window {
+.inventory-window,
+.hud-arrangement-window {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -114,7 +115,8 @@ h1 {
 .secondary-btn,
 .primary-btn,
 .tiny-btn,
-.tab {
+.tab,
+.hud-arrangement-btn {
   padding: 10px 14px;
 }
 
@@ -128,7 +130,8 @@ h1 {
 .secondary-btn,
 .ghost-btn,
 .tiny-btn,
-.tab {
+.tab,
+.hud-arrangement-btn {
   background: rgba(19, 32, 47, 0.7);
   color: var(--text);
 }
@@ -360,15 +363,22 @@ input[type="color"] {
   gap: 6px;
 }
 
-.slot {
-  width: 28px;
-  height: 28px;
+.slot,
+.small-slot,
+.mini-slot,
+.offhand-slot {
   border-radius: 6px;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(127, 211, 255, 0.3);
 }
 
-.slot.active {
+.slot {
+  width: 28px;
+  height: 28px;
+}
+
+.slot.active,
+.small-slot.active {
   background: rgba(127, 211, 255, 0.18);
   box-shadow: inset 0 0 0 1px rgba(127, 211, 255, 0.6);
 }
@@ -407,7 +417,8 @@ input[type="color"] {
   font-size: 1rem;
 }
 
-.inventory-overlay {
+.inventory-overlay,
+.hud-arrangement-overlay {
   position: fixed;
   inset: 0;
   background: rgba(6, 10, 16, 0.72);
@@ -416,7 +427,8 @@ input[type="color"] {
   padding: 18px;
 }
 
-.inventory-window {
+.inventory-window,
+.hud-arrangement-window {
   width: min(760px, 100%);
   background: rgba(12, 21, 32, 0.97);
   border: 1px solid var(--line);
@@ -446,7 +458,8 @@ input[type="color"] {
   padding-bottom: 4px;
 }
 
-.tab {
+.tab,
+.hud-arrangement-btn {
   white-space: nowrap;
   border-radius: 10px;
   background: rgba(255,255,255,0.02);
@@ -455,6 +468,11 @@ input[type="color"] {
 .tab.active {
   background: rgba(127, 211, 255, 0.14);
   border-color: rgba(127, 211, 255, 0.45);
+}
+
+.hud-arrangement-btn {
+  width: 100%;
+  margin-bottom: 12px;
 }
 
 .inventory-panel {
@@ -516,6 +534,109 @@ input[type="color"] {
   margin-top: 8px;
 }
 
+.hud-stage {
+  position: relative;
+  width: 100%;
+  min-height: 380px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(12, 18, 26, 0.8), rgba(8, 12, 18, 0.96));
+  overflow: hidden;
+}
+
+.hud-item {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(127, 211, 255, 0.2);
+  background: rgba(17, 29, 42, 0.7);
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.hud-item:active {
+  cursor: grabbing;
+}
+
+.hud-inline,
+.status-row,
+.armor-hud-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hotbar-compact {
+  gap: 6px;
+}
+
+.small-slot,
+.mini-slot {
+  width: 26px;
+  height: 26px;
+  display: inline-block;
+}
+
+.heart {
+  color: #ff6b88;
+  font-size: 1.1rem;
+}
+
+.hearts-strip {
+  min-width: 110px;
+  justify-content: center;
+}
+
+.hunger-strip {
+  width: 110px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+  border: 1px solid rgba(127, 211, 255, 0.2);
+}
+
+.hunger-bar {
+  display: inline-block;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(90deg, #ffd77a, #ffb347);
+}
+
+.xp-strip {
+  display: flex;
+  gap: 3px;
+  width: 80px;
+  align-items: flex-end;
+}
+
+.xp-strip span {
+  display: inline-block;
+  width: 12px;
+  height: 18px;
+  background: rgba(127, 211, 255, 0.9);
+  border-radius: 4px 4px 0 0;
+}
+
+.armor-hud-row {
+  align-items: center;
+  gap: 12px;
+}
+
+.armor-stack {
+  display: flex;
+  gap: 4px;
+}
+
+.offhand-slot {
+  width: 30px;
+  height: 30px;
+}
+
 @media (max-width: 840px) {
   .content-grid,
   .settings-grid {
@@ -538,7 +659,8 @@ input[type="color"] {
 
   .topbar,
   .panel,
-  .inventory-window {
+  .inventory-window,
+  .hud-arrangement-window {
     border-radius: 14px;
   }
 
@@ -562,7 +684,12 @@ input[type="color"] {
     grid-template-columns: repeat(3, minmax(50px, 1fr));
   }
 
-  .inventory-window {
+  .inventory-window,
+  .hud-arrangement-window {
     padding: 12px;
+  }
+
+  .hud-stage {
+    min-height: 320px;
   }
 }
