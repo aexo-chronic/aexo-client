@@ -1,173 +1,568 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>aexo Client</title>
-    <meta name="theme-color" content="#0d1320" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="app-shell">
-      <header class="topbar">
-        <div class="brand-wrap">
-          <div class="brand-mark">✦</div>
-          <div>
-            <div class="eyebrow">EAGLERCRAFT 26.3</div>
-            <h1>aexo Client</h1>
-          </div>
-        </div>
-        <button class="ghost-btn" id="menuToggle">Menu</button>
-      </header>
+:root {
+  --bg-1: #070b12;
+  --bg-2: #0d1420;
+  --panel: rgba(14, 24, 35, 0.92);
+  --panel-strong: rgba(17, 29, 42, 0.98);
+  --line: rgba(128, 202, 255, 0.22);
+  --text: #edf8ff;
+  --muted: #a5bed4;
+  --accent: #7fd3ff;
+  --accent-strong: #52c0ff;
+  --success: #59d3b1;
+  --warning: #ffd77a;
+  --shadow: rgba(0, 0, 0, 0.38);
+}
 
-      <main class="main-menu">
-        <section class="hero-panel panel">
-          <div class="hero-copy">
-            <p class="label">BROWSER MC EXPERIENCE</p>
-            <h2>Play smarter, lighter, faster.</h2>
-            <p>
-              A custom browser client shell built for mobile play with a dark icy-blue visual identity.
-            </p>
-          </div>
-          <div class="hero-actions">
-            <button class="primary-btn" id="playBtn">Play</button>
-            <button class="secondary-btn" id="settingsBtn">Settings</button>
-          </div>
-        </section>
+* {
+  box-sizing: border-box;
+}
 
-        <section class="quick-stats panel">
-          <div class="stat-block">
-            <span class="stat-name">FPS mode</span>
-            <strong>Balanced</strong>
-          </div>
-          <div class="stat-block">
-            <span class="stat-name">Render</span>
-            <strong>Mobile</strong>
-          </div>
-          <div class="stat-block">
-            <span class="stat-name">Latency</span>
-            <strong>Low</strong>
-          </div>
-        </section>
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top, rgba(112, 180, 255, 0.12), transparent 25%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
 
-        <section class="content-grid">
-          <aside class="panel left-panel">
-            <div class="section-header">
-              <span>Server</span>
-              <button class="tiny-btn">Direct Connect</button>
-            </div>
+body {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
 
-            <div class="server-card">
-              <div class="server-title-row">
-                <span class="dot online"></span>
-                <strong>Official Hub</strong>
-              </div>
-              <p>play.aexo.dev</p>
-            </div>
+button, input {
+  font: inherit;
+}
 
-            <div class="list-box">
-              <button class="list-item active">Singleplayer</button>
-              <button class="list-item">Multiplayer</button>
-              <button class="list-item">Resource Packs</button>
-              <button class="list-item">Favorites</button>
-            </div>
-          </aside>
+button {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease, border-color 0.2s ease;
+}
 
-          <section class="panel center-panel">
-            <div class="section-header">
-              <span>Performance</span>
-              <span class="pill">Optimized</span>
-            </div>
+button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(127, 211, 255, 0.55);
+}
 
-            <div class="toggle-group">
-              <label class="toggle-row">
-                <span>Low-power mode</span>
-                <input type="checkbox" checked />
-              </label>
-              <label class="toggle-row">
-                <span>Particles</span>
-                <input type="checkbox" checked />
-              </label>
-              <label class="toggle-row">
-                <span>Dynamic shadows</span>
-                <input type="checkbox" />
-              </label>
-              <label class="toggle-row">
-                <span>V-Sync</span>
-                <input type="checkbox" />
-              </label>
-            </div>
-          </section>
+.app-shell {
+  width: min(1100px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-          <aside class="panel right-panel">
-            <div class="section-header">
-              <span>HUD</span>
-              <button class="tiny-btn" id="hudPresetBtn">Preset</button>
-            </div>
+.topbar,
+.panel,
+.inventory-window {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 12px 28px var(--shadow);
+}
 
-            <div class="hud-preview">
-              <div class="hud-surface">
-                <div class="crosshair"></div>
-                <div class="hotbar">
-                  <span class="slot active"></span>
-                  <span class="slot"></span>
-                  <span class="slot"></span>
-                  <span class="slot"></span>
-                </div>
-                <div class="hud-text">Health 20/20</div>
-                <div class="hud-text mini">X: 128 Y: 64 Z: -42</div>
-              </div>
-            </div>
-          </aside>
-        </section>
-      </main>
+.topbar {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
 
-      <section class="settings-panel panel hidden" id="settingsPanel">
-        <div class="section-header">
-          <span>Client Settings</span>
-          <button class="tiny-btn" id="closePanelBtn">Close</button>
-        </div>
+.brand-wrap,
+.top-actions,
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-        <div class="settings-grid">
-          <div>
-            <h3>General</h3>
-            <label class="setting-row">
-              <span>Touch controls</span>
-              <input type="checkbox" checked />
-            </label>
-            <label class="setting-row">
-              <span>Auto hide HUD</span>
-              <input type="checkbox" />
-            </label>
-          </div>
+.brand-wrap {
+  min-width: 0;
+}
 
-          <div>
-            <h3>Theme</h3>
-            <label class="setting-row">
-              <span>Accent color</span>
-              <input type="color" value="#75d5ff" />
-            </label>
-            <label class="setting-row">
-              <span>Night mode</span>
-              <input type="checkbox" checked />
-            </label>
-          </div>
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(127, 211, 255, 0.28), rgba(82, 192, 255, 0.12));
+  color: var(--accent);
+  font-size: 1.5rem;
+}
 
-          <div>
-            <h3>Gameplay</h3>
-            <label class="setting-row">
-              <span>Sprint toggle</span>
-              <input type="checkbox" checked />
-            </label>
-            <label class="setting-row">
-              <span>Smart inventory</span>
-              <input type="checkbox" />
-            </label>
-          </div>
-        </div>
-      </section>
-    </div>
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+}
 
-    <script src="app.js"></script>
-  </body>
-</html>
+h1, h2, h3, p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(1.2rem, 4vw, 2rem);
+}
+
+.ghost-btn,
+.secondary-btn,
+.primary-btn,
+.tiny-btn,
+.tab {
+  padding: 10px 14px;
+}
+
+.primary-btn {
+  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+  color: #0a1725;
+  border: none;
+  font-weight: 700;
+}
+
+.secondary-btn,
+.ghost-btn,
+.tiny-btn,
+.tab {
+  background: rgba(19, 32, 47, 0.7);
+  color: var(--text);
+}
+
+.main-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hero-panel {
+  padding: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.hero-copy {
+  flex: 1 1 320px;
+}
+
+.hero-copy h2 {
+  margin: 10px 0 8px;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+.hero-copy p {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.label {
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.quick-stats {
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.stat-block {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-name {
+  color: var(--muted);
+  font-size: 0.73rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.2fr 1fr;
+  gap: 16px;
+}
+
+.left-panel,
+.center-panel,
+.right-panel,
+.settings-panel {
+  padding: 16px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.pill {
+  border-radius: 999px;
+  background: rgba(89, 211, 177, 0.12);
+  color: var(--success);
+  padding: 6px 10px;
+  font-size: 0.72rem;
+}
+
+.server-card {
+  margin-bottom: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(16, 26, 38, 0.75);
+  padding: 12px 14px;
+}
+
+.server-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot.online {
+  background: var(--success);
+  box-shadow: 0 0 12px rgba(89, 211, 177, 0.9);
+}
+
+.list-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.list-item {
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+}
+
+.list-item.active {
+  background: rgba(127, 211, 255, 0.12);
+  border-color: rgba(127, 211, 255, 0.4);
+}
+
+.toggle-group,
+.settings-grid,
+.mod-list {
+  display: grid;
+  gap: 10px;
+}
+
+.toggle-row,
+.setting-row,
+.mod-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 12px;
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+input[type="color"] {
+  width: 44px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.hud-preview {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(11, 17, 24, 0.8), rgba(8, 12, 18, 0.95));
+  padding: 18px 14px 10px;
+}
+
+.hud-surface {
+  position: relative;
+  width: 100%;
+  min-height: 180px;
+  border-radius: 12px;
+  border: 1px solid rgba(127, 211, 255, 0.18);
+  background: rgba(12, 18, 26, 0.75);
+  overflow: hidden;
+}
+
+.crosshair {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 26px;
+  height: 26px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(127, 211, 255, 0.8);
+}
+
+.crosshair::before,
+.crosshair::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(127, 211, 255, 0.8);
+}
+
+.crosshair::before {
+  width: 1px;
+  height: 26px;
+}
+
+.crosshair::after {
+  width: 26px;
+  height: 1px;
+}
+
+.hotbar {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.slot {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(127, 211, 255, 0.3);
+}
+
+.slot.active {
+  background: rgba(127, 211, 255, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(127, 211, 255, 0.6);
+}
+
+.hud-text {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+.hud-text.mini {
+  top: auto;
+  bottom: 52px;
+  left: 12px;
+  color: var(--muted);
+}
+
+.settings-panel {
+  display: block;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.settings-grid {
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  margin-top: 14px;
+}
+
+.settings-grid h3 {
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.inventory-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 10, 16, 0.72);
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.inventory-window {
+  width: min(760px, 100%);
+  background: rgba(12, 21, 32, 0.97);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.inventory-kicker {
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.66rem;
+}
+
+.inventory-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 12px;
+  padding-bottom: 4px;
+}
+
+.tab {
+  white-space: nowrap;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.02);
+}
+
+.tab.active {
+  background: rgba(127, 211, 255, 0.14);
+  border-color: rgba(127, 211, 255, 0.45);
+}
+
+.inventory-panel {
+  display: none;
+}
+
+.inventory-panel.active {
+  display: block;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(56px, 1fr));
+  gap: 12px;
+}
+
+.slot-box, .craft-box, .armor-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  min-height: 64px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+
+.active-item {
+  background: rgba(127, 211, 255, 0.12);
+  border-color: rgba(127, 211, 255, 0.5);
+}
+
+.armor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.craft-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.craft-box.plus {
+  width: 52px;
+  height: 52px;
+  justify-self: center;
+  font-size: 1.6rem;
+  color: var(--warning);
+}
+
+.craft-box.result {
+  background: rgba(89, 211, 177, 0.12);
+  border-color: rgba(89, 211, 177, 0.5);
+}
+
+.mod-list {
+  margin-top: 8px;
+}
+
+@media (max-width: 840px) {
+  .content-grid,
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-panel {
+    flex-direction: column;
+  }
+
+  .quick-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+  }
+
+  .topbar,
+  .panel,
+  .inventory-window {
+    border-radius: 14px;
+  }
+
+  .topbar {
+    padding: 12px 14px;
+  }
+
+  .top-actions,
+  .hero-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .primary-btn,
+  .secondary-btn,
+  .ghost-btn {
+    flex: 1;
+  }
+
+  .slots-grid {
+    grid-template-columns: repeat(3, minmax(50px, 1fr));
+  }
+
+  .inventory-window {
+    padding: 12px;
+  }
+}
