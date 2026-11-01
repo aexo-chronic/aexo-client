@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>aexo Client</title>
+    <meta name="theme-color" content="#0d1320" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-wrap">
+          <div class="brand-mark">✦</div>
+          <div>
+            <div class="eyebrow">EAGLERCRAFT 26.3</div>
+            <h1>aexo Client</h1>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <button class="ghost-btn" id="inventoryBtn">Inventory</button>
+          <button class="ghost-btn" id="menuToggle">Menu</button>
+        </div>
+      </header>
+
+      <main class="main-menu">
+        <section class="hero-panel panel">
+          <div class="hero-copy">
+            <p class="label">BROWSER MC EXPERIENCE</p>
+            <h2>Play smarter, lighter, faster.</h2>
+            <p>
+              Custom aexo Client branding with a mobile-first browser UI for Eaglercraft 26.3.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <button class="primary-btn" id="playBtn">Play</button>
+            <button class="secondary-btn" id="settingsBtn">Settings</button>
+          </div>
+        </section>
+
+        <section class="quick-stats panel">
+          <div class="stat-block">
+            <span class="stat-name">FPS mode</span>
+            <strong>Balanced</strong>
+          </div>
+          <div class="stat-block">
+            <span class="stat-name">Render</span>
+            <strong>Mobile</strong>
+          </div>
+          <div class="stat-block">
+            <span class="stat-name">Latency</span>
+            <strong>Low</strong>
+          </div>
+        </section>
+
+        <section class="content-grid">
+          <aside class="panel left-panel">
+            <div class="section-header">
+              <span>Server</span>
+              <button class="tiny-btn">Direct</button>
+            </div>
+
+            <div class="server-card">
+              <div class="server-title-row">
+                <span class="dot online"></span>
+                <strong>Official Hub</strong>
+              </div>
+              <p>play.aexo.dev</p>
+            </div>
+
+            <div class="list-box">
+              <button class="list-item active">Singleplayer</button>
+              <button class="list-item">Multiplayer</button>
+              <button class="list-item">Resource Packs</button>
+              <button class="list-item">Favorites</button>
+            </div>
+          </aside>
+
+          <section class="panel center-panel">
+            <div class="section-header">
+              <span>Performance</span>
+              <span class="pill">Optimized</span>
+            </div>
+
+            <div class="toggle-group">
+              <label class="toggle-row">
+                <span>Low-power mode</span>
+                <input type="checkbox" checked />
+              </label>
+              <label class="toggle-row">
+                <span>Particles</span>
+                <input type="checkbox" checked />
+              </label>
+              <label class="toggle-row">
+                <span>Dynamic shadows</span>
+                <input type="checkbox" />
+              </label>
+              <label class="toggle-row">
+                <span>V-Sync</span>
+                <input type="checkbox" />
+              </label>
+            </div>
+          </section>
+
+          <aside class="panel right-panel">
+            <div class="section-header">
+              <span>HUD</span>
+              <button class="tiny-btn" id="hudPresetBtn">Preset</button>
+            </div>
+
+            <div class="hud-preview">
+              <div class="hud-surface">
+                <div class="crosshair"></div>
+                <div class="hotbar">
+                  <span class="slot active"></span>
+                  <span class="slot"></span>
+                  <span class="slot"></span>
+                  <span class="slot"></span>
+                </div>
+                <div class="hud-text">Health 20/20</div>
+                <div class="hud-text mini">X: 128 Y: 64 Z: -42</div>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </main>
+
+      <section class="settings-panel panel hidden" id="settingsPanel">
+        <div class="section-header">
+          <span>Client Settings</span>
+          <button class="tiny-btn" id="closePanelBtn">Close</button>
+        </div>
+
+        <div class="settings-grid">
+          <div>
+            <h3>General</h3>
+            <label class="setting-row">
+              <span>Touch controls</span>
+              <input type="checkbox" checked />
+            </label>
+            <label class="setting-row">
+              <span>Auto hide HUD</span>
+              <input type="checkbox" />
+            </label>
+          </div>
+
+          <div>
+            <h3>Theme</h3>
+            <label class="setting-row">
+              <span>Accent color</span>
+              <input type="color" value="#75d5ff" />
+            </label>
+            <label class="setting-row">
+              <span>Night mode</span>
+              <input type="checkbox" checked />
+            </label>
+          </div>
+
+          <div>
+            <h3>Gameplay</h3>
+            <label class="setting-row">
+              <span>Sprint toggle</span>
+              <input type="checkbox" checked />
+            </label>
+            <label class="setting-row">
+              <span>Smart inventory</span>
+              <input type="checkbox" />
+            </label>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="inventory-overlay hidden" id="inventoryOverlay">
+      <div class="inventory-window">
+        <div class="inventory-header">
+          <div>
+            <div class="inventory-kicker">aexo Client</div>
+            <h3>Inventory</h3>
+          </div>
+          <button class="tiny-btn" id="closeInventoryBtn">Close</button>
+        </div>
+
+        <div class="inventory-tabs">
+          <button class="tab active" data-tab="inventory">Inventory</button>
+          <button class="tab" data-tab="armor">Armor</button>
+          <button class="tab" data-tab="crafting">Crafting</button>
+          <button class="tab" data-tab="mods">Mods</button>
+        </div>
+
+        <div class="inventory-panel active" data-panel="inventory">
+          <div class="slots-grid">
+            <div class="slot-box"></div>
+            <div class="slot-box"></div>
+            <div class="slot-box active-item"></div>
+            <div class="slot-box"></div>
+            <div class="slot-box"></div>
+            <div class="slot-box"></div>
+            <div class="slot-box"></div>
+            <div class="slot-box"></div>
+            <div class="slot-box"></div>
+            <div class="slot-box"></div>
+            <div class="slot-box"></div>
+            <div class="slot-box"></div>
+          </div>
+        </div>
+
+        <div class="inventory-panel" data-panel="armor">
+          <div class="armor-grid">
+            <div class="armor-card"><span>Helmet</span></div>
+            <div class="armor-card"><span>Chest</span></div>
+            <div class="armor-card"><span>Legs</span></div>
+            <div class="armor-card"><span>Boots</span></div>
+          </div>
+        </div>
+
+        <div class="inventory-panel" data-panel="crafting">
+          <div class="craft-grid">
+            <div class="craft-box"></div>
+            <div class="craft-box plus">+</div>
+            <div class="craft-box result"></div>
+          </div>
+        </div>
+
+        <div class="inventory-panel" data-panel="mods">
+          <div class="mod-list">
+            <div class="mod-row">
+              <span>Hitboxes</span>
+              <input type="checkbox" checked />
+            </div>
+            <div class="mod-row">
+              <span>Player Hearts</span>
+              <input type="checkbox" checked />
+            </div>
+            <div class="mod-row">
+              <span>Absorption Hearts</span>
+              <input type="checkbox" checked />
+            </div>
+            <div class="mod-row">
+              <span>Touch controls</span>
+              <input type="checkbox" checked />
+            </div>
+            <div class="mod-row">
+              <span>Auto sprint</span>
+              <input type="checkbox" checked />
+            </div>
+            <div class="mod-row">
+              <span>Mini map</span>
+              <input type="checkbox" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
