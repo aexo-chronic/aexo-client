@@ -1,0 +1,67 @@
+const menuToggle = document.getElementById('menuToggle');
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsPanel = document.getElementById('settingsPanel');
+const closePanelBtn = document.getElementById('closePanelBtn');
+const playBtn = document.getElementById('playBtn');
+const hudPresetBtn = document.getElementById('hudPresetBtn');
+
+function toggleSettingsPanel() {
+  settingsPanel.classList.toggle('hidden');
+}
+
+menuToggle?.addEventListener('click', () => {
+  settingsPanel.classList.add('hidden');
+});
+
+settingsBtn?.addEventListener('click', toggleSettingsPanel);
+closePanelBtn?.addEventListener('click', toggleSettingsPanel);
+playBtn?.addEventListener('click', () => {
+  alert('This is a launcher shell. Connect the verified Eaglercraft 26.3 build or approved URL here.');
+});
+
+hudPresetBtn?.addEventListener('click', () => {
+  const hudText = document.querySelector('.hud-text');
+  const miniText = document.querySelector('.hud-text.mini');
+
+  if (hudText && miniText) {
+    hudText.textContent = 'Preset: Compact';
+    miniText.textContent = 'FPS 60 • Dmg 0.0';
+  }
+});
+
+const themeRoot = document.documentElement;
+const colorInput = document.querySelector('input[type="color"]');
+
+colorInput?.addEventListener('input', (event) => {
+  const value = event.target.value;
+  themeRoot.style.setProperty('--accent', value);
+  themeRoot.style.setProperty('--accent-strong', value);
+});
+
+const touchToggles = document.querySelectorAll('input[type="checkbox"]');
+for (const toggle of touchToggles) {
+  toggle.addEventListener('change', () => {
+    const label = toggle.closest('label');
+    if (label) {
+      label.style.opacity = toggle.checked ? '1' : '0.8';
+    }
+  });
+}
+
+const serverItems = document.querySelectorAll('.list-item');
+serverItems.forEach((item) => {
+  item.addEventListener('click', () => {
+    serverItems.forEach((entry) => entry.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+if (window.matchMedia('(display-mode: standalone)').matches || /iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+  document.body.classList.add('ios-mode');
+}
+
+window.addEventListener('load', () => {
+  document.body.style.opacity = '1';
+});
+
+console.log('aexo Client shell initialized. Ready for a verified Eaglercraft 26.3 integration.');
