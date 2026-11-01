@@ -1,449 +1,239 @@
-* {
-  box-sizing: border-box;
+const menuToggle = document.getElementById('menuToggle');
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsPanel = document.getElementById('settingsPanel');
+const closePanelBtn = document.getElementById('closePanelBtn');
+const playBtn = document.getElementById('playBtn');
+const hudPresetBtn = document.getElementById('hudPresetBtn');
+const inventoryBtn = document.getElementById('inventoryBtn');
+const closeInventoryBtn = document.getElementById('closeInventoryBtn');
+const inventoryOverlay = document.getElementById('inventoryOverlay');
+const tabButtons = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.inventory-panel');
+const hudArrangementBtn = document.getElementById('hudArrangementBtn');
+const hudArrangementOverlay = document.getElementById('hudArrangementOverlay');
+const closeHudArrangementBtn = document.getElementById('closeHudArrangementBtn');
+const STORAGE_KEY = 'aexo-client-settings-v1';
+
+function getToggleKey(input) {
+  const row = input.closest('.mod-row, .toggle-row, .setting-row');
+  const label = row?.querySelector('span');
+  const raw = label?.textContent?.trim() || input.id || input.name || 'checkbox';
+  return raw.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
-:root {
-  --bg-1: #070b12;
-  --bg-2: #0d1420;
-  --panel: rgba(14, 24, 35, 0.9);
-  --panel-strong: rgba(17, 29, 42, 0.98);
-  --line: rgba(128, 202, 255, 0.25);
-  --text: #edf8ff;
-  --muted: #a5bed4;
-  --accent: #7fd3ff;
-  --accent-strong: #52c0ff;
-  --success: #59d3b1;
-  --shadow: rgba(0, 0, 0, 0.35);
-}
-
-html, body {
-  margin: 0;
-  min-height: 100%;
-  background:
-    radial-gradient(circle at top, rgba(112, 180, 255, 0.12), transparent 25%),
-    linear-gradient(180deg, var(--bg-1), var(--bg-2));
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  padding: 16px;
-}
-
-button, input {
-  font: inherit;
-}
-
-button {
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease, border-color 0.2s ease;
-}
-
-button:hover {
-  transform: translateY(-1px);
-  border-color: rgba(127, 211, 255, 0.55);
-}
-
-.app-shell {
-  width: min(1100px, 100%);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.topbar,
-.panel {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  box-shadow: 0 12px 28px var(--shadow);
-}
-
-.topbar {
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.brand-wrap {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brand-mark {
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(127, 211, 255, 0.28), rgba(82, 192, 255, 0.12));
-  color: var(--accent);
-  font-size: 1.5rem;
-}
-
-.eyebrow {
-  color: var(--accent);
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-}
-
-h1, h2, h3, p {
-  margin: 0;
-}
-
-h1 {
-  font-size: clamp(1.2rem, 4vw, 2rem);
-}
-
-.ghost-btn,
-.secondary-btn,
-.primary-btn,
-.tiny-btn {
-  padding: 10px 14px;
-}
-
-.primary-btn {
-  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
-  color: #0a1725;
-  border: none;
-  font-weight: 700;
-}
-
-.secondary-btn,
-.ghost-btn,
-.tiny-btn {
-  background: rgba(19, 32, 47, 0.7);
-  color: var(--text);
-}
-
-.main-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.hero-panel {
-  padding: 18px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 18px;
-}
-
-.hero-copy {
-  flex: 1 1 320px;
-}
-
-.hero-copy h2 {
-  margin: 10px 0 8px;
-  font-size: clamp(1.6rem, 4vw, 3rem);
-  line-height: 1.1;
-}
-
-.hero-copy p {
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-.label {
-  color: var(--accent);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-}
-
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.quick-stats {
-  padding: 14px 16px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(120px, 1fr));
-  gap: 12px;
-}
-
-.stat-block {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.stat-name {
-  color: var(--muted);
-  font-size: 0.73rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.content-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 1.2fr 1fr;
-  gap: 16px;
-}
-
-.left-panel,
-.center-panel,
-.right-panel,
-.settings-panel {
-  padding: 16px;
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 12px;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-.pill {
-  border-radius: 999px;
-  background: rgba(89, 211, 177, 0.12);
-  color: var(--success);
-  padding: 6px 10px;
-  font-size: 0.72rem;
-}
-
-.server-card {
-  margin-bottom: 12px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: rgba(16, 26, 38, 0.75);
-  padding: 12px 14px;
-}
-
-.server-title-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.dot.online {
-  background: var(--success);
-  box-shadow: 0 0 12px rgba(89, 211, 177, 0.9);
-}
-
-.list-box {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.list-item {
-  width: 100%;
-  padding: 10px 12px;
-  text-align: left;
-  background: rgba(255,255,255,0.02);
-  color: var(--text);
-}
-
-.list-item.active {
-  background: rgba(127, 211, 255, 0.12);
-  border-color: rgba(127, 211, 255, 0.4);
-}
-
-.toggle-group,
-.settings-grid {
-  display: grid;
-  gap: 10px;
-}
-
-.toggle-row,
-.setting-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 11px 12px;
-}
-
-input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent);
-}
-
-input[type="color"] {
-  width: 44px;
-  height: 28px;
-  border: none;
-  background: transparent;
-  padding: 0;
-}
-
-.hud-preview {
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(11, 17, 24, 0.8), rgba(8, 12, 18, 0.95));
-  padding: 18px 14px 10px;
-}
-
-.hud-surface {
-  position: relative;
-  width: 100%;
-  min-height: 180px;
-  border-radius: 12px;
-  border: 1px solid rgba(127, 211, 255, 0.18);
-  background: rgba(12, 18, 26, 0.75);
-  overflow: hidden;
-}
-
-.crosshair {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  width: 26px;
-  height: 26px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 1px solid rgba(127, 211, 255, 0.8);
-}
-
-.crosshair::before,
-.crosshair::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(127, 211, 255, 0.8);
-}
-
-.crosshair::before {
-  width: 1px;
-  height: 26px;
-}
-
-.crosshair::after {
-  width: 26px;
-  height: 1px;
-}
-
-.hotbar {
-  position: absolute;
-  left: 50%;
-  bottom: 10px;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-}
-
-.slot {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(127, 211, 255, 0.3);
-}
-
-.slot.active {
-  background: rgba(127, 211, 255, 0.18);
-  box-shadow: inset 0 0 0 1px rgba(127, 211, 255, 0.6);
-}
-
-.hud-text {
-  position: absolute;
-  left: 12px;
-  top: 12px;
-  font-size: 0.8rem;
-  color: var(--text);
-}
-
-.hud-text.mini {
-  top: auto;
-  bottom: 52px;
-  left: 12px;
-  color: var(--muted);
-}
-
-.settings-panel {
-  display: block;
-}
-
-.hidden {
-  display: none;
-}
-
-.settings-grid {
-  grid-template-columns: repeat(3, minmax(180px, 1fr));
-  margin-top: 14px;
-}
-
-.settings-grid h3 {
-  margin-bottom: 10px;
-  color: var(--muted);
-  font-size: 1rem;
-}
-
-@media (max-width: 840px) {
-  .content-grid,
-  .settings-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-panel {
-    flex-direction: column;
-  }
-
-  .quick-stats {
-    grid-template-columns: 1fr;
+function loadState() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  } catch {
+    return {};
   }
 }
 
-@media (max-width: 480px) {
-  body {
-    padding: 12px;
+function saveState() {
+  const toggles = {};
+  document.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+    toggles[getToggleKey(input)] = input.checked;
+  });
+
+  const hud = {};
+  document.querySelectorAll('.hud-item').forEach((item) => {
+    const key = item.dataset.name || 'hud-item';
+    hud[key] = {
+      left: item.style.left || '',
+      top: item.style.top || '',
+      right: item.style.right || '',
+      bottom: item.style.bottom || ''
+    };
+  });
+
+  const state = {
+    inventoryOpen: !inventoryOverlay?.classList.contains('hidden'),
+    settingsOpen: !settingsPanel?.classList.contains('hidden'),
+    hudOpen: !hudArrangementOverlay?.classList.contains('hidden'),
+    toggles,
+    hud
+  };
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function applySavedState() {
+  const state = loadState();
+
+  if (state.toggles) {
+    document.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+      const key = getToggleKey(input);
+      if (state.toggles[key] !== undefined) {
+        input.checked = Boolean(state.toggles[key]);
+      }
+    });
   }
 
-  .topbar,
-  .panel {
-    border-radius: 14px;
+  if (state.hud) {
+    document.querySelectorAll('.hud-item').forEach((item) => {
+      const key = item.dataset.name || 'hud-item';
+      const pos = state.hud[key];
+      if (!pos) return;
+      if (pos.left) item.style.left = pos.left;
+      if (pos.top) item.style.top = pos.top;
+      if (pos.right) item.style.right = pos.right;
+      if (pos.bottom) item.style.bottom = pos.bottom;
+    });
   }
 
-  .topbar {
-    padding: 12px 14px;
+  if (state.inventoryOpen === false) {
+    inventoryOverlay?.classList.add('hidden');
+  } else {
+    inventoryOverlay?.classList.remove('hidden');
   }
 
-  .hero-panel,
-  .left-panel,
-  .center-panel,
-  .right-panel,
-  .settings-panel {
-    padding: 12px;
+  if (state.settingsOpen === false) {
+    settingsPanel?.classList.add('hidden');
+  } else {
+    settingsPanel?.classList.remove('hidden');
   }
 
-  .hero-actions {
-    width: 100%;
-  }
-
-  .primary-btn,
-  .secondary-btn,
-  .ghost-btn {
-    flex: 1;
+  if (state.hudOpen === false) {
+    hudArrangementOverlay?.classList.add('hidden');
+  } else {
+    hudArrangementOverlay?.classList.remove('hidden');
   }
 }
+
+function toggleSettingsPanel() {
+  settingsPanel.classList.toggle('hidden');
+  saveState();
+}
+
+function toggleInventory() {
+  inventoryOverlay.classList.toggle('hidden');
+  saveState();
+}
+
+function toggleHudArrangement() {
+  hudArrangementOverlay.classList.toggle('hidden');
+  saveState();
+}
+
+menuToggle?.addEventListener('click', () => {
+  settingsPanel.classList.add('hidden');
+  saveState();
+});
+
+settingsBtn?.addEventListener('click', toggleSettingsPanel);
+closePanelBtn?.addEventListener('click', toggleSettingsPanel);
+inventoryBtn?.addEventListener('click', toggleInventory);
+closeInventoryBtn?.addEventListener('click', toggleInventory);
+hudArrangementBtn?.addEventListener('click', () => {
+  toggleInventory();
+  toggleHudArrangement();
+});
+closeHudArrangementBtn?.addEventListener('click', toggleHudArrangement);
+
+playBtn?.addEventListener('click', () => {
+  alert('Connect the verified Eaglercraft 26.3 build or approved server URL here.');
+});
+
+hudPresetBtn?.addEventListener('click', () => {
+  const hudText = document.querySelector('.hud-text');
+  const miniText = document.querySelector('.hud-text.mini');
+
+  if (hudText && miniText) {
+    hudText.textContent = 'Preset: Compact';
+    miniText.textContent = 'FPS 60 • Dmg 0.0';
+  }
+});
+
+const themeRoot = document.documentElement;
+const colorInput = document.querySelector('input[type="color"]');
+
+colorInput?.addEventListener('input', (event) => {
+  const value = event.target.value;
+  themeRoot.style.setProperty('--accent', value);
+  themeRoot.style.setProperty('--accent-strong', value);
+  saveState();
+});
+
+const touchToggles = document.querySelectorAll('input[type="checkbox"]');
+for (const toggle of touchToggles) {
+  toggle.addEventListener('change', () => {
+    const row = toggle.closest('label, .mod-row');
+    if (row) {
+      row.style.opacity = toggle.checked ? '1' : '0.82';
+    }
+    saveState();
+  });
+}
+
+const serverItems = document.querySelectorAll('.list-item');
+serverItems.forEach((item) => {
+  item.addEventListener('click', () => {
+    serverItems.forEach((entry) => entry.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+tabButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const targetName = button.dataset.tab;
+
+    tabButtons.forEach((tab) => tab.classList.toggle('active', tab === button));
+    panels.forEach((panel) => {
+      panel.classList.toggle('active', panel.dataset.panel === targetName);
+    });
+  });
+});
+
+const dragItems = document.querySelectorAll('.hud-item');
+let dragState = null;
+
+for (const item of dragItems) {
+  item.addEventListener('pointerdown', (event) => {
+    event.preventDefault();
+    const stage = document.getElementById('hudStage');
+    if (!stage) return;
+
+    const rect = stage.getBoundingClientRect();
+    dragState = {
+      element: item,
+      offsetX: event.clientX - rect.left - item.offsetLeft,
+      offsetY: event.clientY - rect.top - item.offsetTop,
+    };
+
+    item.setPointerCapture(event.pointerId);
+  });
+
+  item.addEventListener('pointermove', (event) => {
+    if (!dragState || dragState.element !== item) return;
+
+    const stage = document.getElementById('hudStage');
+    if (!stage) return;
+
+    const rect = stage.getBoundingClientRect();
+    const x = Math.min(Math.max(event.clientX - rect.left - dragState.offsetX, 0), rect.width - item.offsetWidth);
+    const y = Math.min(Math.max(event.clientY - rect.top - dragState.offsetY, 0), rect.height - item.offsetHeight);
+
+    item.style.left = `${x}px`;
+    item.style.top = `${y}px`;
+    item.style.bottom = 'auto';
+    item.style.right = 'auto';
+  });
+
+  item.addEventListener('pointerup', () => {
+    dragState = null;
+    saveState();
+  });
+
+  item.addEventListener('pointerleave', () => {
+    dragState = null;
+    saveState();
+  });
+}
+
+applySavedState();
+
+if (window.matchMedia('(display-mode: standalone)').matches || /iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+  document.body.classList.add('ios-mode');
+}
+
+console.log('aexo Client shell initialized. Settings and HUD layout are saved locally on this device.');
